@@ -3167,6 +3167,19 @@ namespace win32
   // Converts UTF-16 message string to UTF-8
   extern int __stdcall WideCharToMultiByte(unsigned int CodePage, DWORD dwFlags, const wchar_t *lpWideCharStr, int cchWideChar, char *lpMultiByteStr, int cbMultiByte, const char *lpDefaultChar, int *lpUsedDefaultChar);
 #pragma comment(lib, "kernel32.lib")
+#if defined(__MINGW32__)
+#if defined(__x86_64__)
+#pragma comment(linker, "/alternatename:_ZN13system_error25win3212GetLastErrorEv=GetLastError")
+#pragma comment(linker, "/alternatename:_ZN13system_error25win3214FormatMessageWEmPKvmmPwmPv=FormatMessageW")
+#pragma comment(linker, "/alternatename:_ZN13system_error25win3219WideCharToMultiByteEjmPKwiPciPKcPi=WideCharToMultiByte")
+#elif defined(__i386__)
+#pragma comment(linker, "/alternatename:__ZN13system_error25win3212GetLastErrorEv@0=__imp__GetLastError@0")
+#pragma comment(linker, "/alternatename:__ZN13system_error25win3214FormatMessageWEmPKvmmPwmPv@28=__imp__FormatMessageW@28")
+#pragma comment(linker, "/alternatename:__ZN13system_error25win3219WideCharToMultiByteEjmPKwiPciPKcPi@32=__imp__WideCharToMultiByte@32")
+#else
+#error Unknown architecture
+#endif
+#else
 #if (defined(__x86_64__) || defined(_M_X64)) || (defined(__aarch64__) || defined(_M_ARM64))
 #pragma comment(linker, "/alternatename:?GetLastError@win32@system_error2@@YAKXZ=GetLastError")
 #pragma comment(linker, "/alternatename:?FormatMessageW@win32@system_error2@@YAKKPEBXKKPEA_WKPEAX@Z=FormatMessageW")
@@ -3181,6 +3194,7 @@ namespace win32
 #pragma comment(linker, "/alternatename:?WideCharToMultiByte@win32@system_error2@@YAHIKPB_WHPADHPBDPAH@Z=WideCharToMultiByte")
 #else
 #error Unknown architecture
+#endif
 #endif
 } // namespace win32
 class _win32_code_domain;
