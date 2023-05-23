@@ -3,11 +3,12 @@ cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 project(status-code VERSION 1.0 LANGUAGES CXX)
 include(GNUInstallDirs)
 enable_testing()
+
+set(maybe_dep OFF)
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-  set(PROJECT_IS_DEPENDENCY OFF)
-else()
-  set(PROJECT_IS_DEPENDENCY ON)
+  set(maybe_dep ON)
 endif()
+option(PROJECT_IS_DEPENDENCY ${maybe_dep})
 
 # On MSVC very annoyingly cmake puts /EHsc into the global flags which means you
 # get a warning when you try to disable exceptions. I hate to use this
